@@ -6,10 +6,10 @@ import matplotlib.animation as animation
 
 fig, ax = plt.subplots()
 
-t = np.linspace(0, 200, 40000)
 a = 3
 b = 2
-d = np.linspace(0, 2 * np.pi, 1000)
+t = np.linspace(0, 2 * np.pi * (a - b), 40000)
+d = np.linspace(0, 0 * np.pi, 1000)
 
 
 
