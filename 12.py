@@ -6,8 +6,8 @@ import matplotlib.animation as animation
 
 fig, ax = plt.subplots()
 
-a = 5
-b = 3
+a = 3
+b = 2
 t = np.linspace(0, 2 * np.pi, 1000)
 d = np.linspace(0, 2 * np.pi, 1000)
 

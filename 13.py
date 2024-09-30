@@ -35,4 +35,4 @@ def lis_hist(a, b, d):
     plt.show()
 
 
-lis_hist(5, 3, np.pi / 4)
+lis_hist(3, 2, np.pi / 4)
