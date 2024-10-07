@@ -2,29 +2,39 @@ import matplotlib.pyplot as plt
 import numpy as np
 import matplotlib.animation as animation
 import os
+import json
 
-
-time  = 30
-N = 200
+dt  = 0.1
+N = 1423
 
 u0 = 0
 x0 = 1
 w = 1.3
 
-os.system("g++ RunnKut.cpp")
-os.system(f"./a.out >> xu.txt")
-f = open('xu.txt', 'r')
+method_type = "rungecat"
+out_file = "xu.txt"
+order = 2
+
+config = eval(f'{{"dt" : {dt}, "N" : {N}, "order" : {order}, "x_0" : {x0}, "u_0" : {u0}, "w" : {w}, "type" : "{method_type}", "output_file" : "{out_file}"}}')
+
+f = open('config.json', 'w')
+json.dump(config, f)
+f.close()
+
+
+
+os.system("g++ simulation_methods.cpp")
+os.system("./a.out")
+f = open(out_file, 'r')
 t = f.read()
 f.close()
-f = open('xu.txt', 'w')
-f.close()
+
 a = t.split()
 
 
 x = [x0]
 t = [0]
 
-dt = time / N
 for i in range(0, N - 1):
     x.append(float(a[i]))
     t.append(t[i] + dt)
@@ -40,6 +50,7 @@ for i in range(2 * N - 2, 3 * N - 3):
     x.append(float(a[i]))
 x_3 = np.array(x)
 '''
+
 t = np.array(t)
 
 y = np.cos(w * t)
