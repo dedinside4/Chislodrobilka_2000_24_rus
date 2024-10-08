@@ -1,49 +1,13 @@
+#ifndef The_methods_that_only_simulate_pathetic_fraction_of_our_beautiful_reality
+
+#define The_methods_that_only_simulate_pathetic_fraction_of_our_beautiful_reality
+
 #include <fstream>
-#include <iostream>
 #include "json.hpp"
 #include <string>
+#include "vector.hpp"
+
 using json = nlohmann::json;
-
-class Vector{
-public:
-
-    double v[40];     
-    int n;
-    Vector(int dimension){
-        n = dimension;
-    }
-    Vector(){
-    }
-    ~Vector(){
-        //delete[] v;
-    }
-
-
-    Vector operator + (Vector ob){
-        Vector A(n);
-        for(int i = 0; i < n; i++){
-            A.v[i] = v[i] + ob.v[i]; 
-        } 
-        return A;         
-    }
-
-    friend Vector operator * (double l, Vector vector){
-        Vector A(vector.n);
-        for(int i = 0; i < vector.n; i++){
-            A.v[i] = vector.v[i] * l; 
-        }      
-        return A;    
-    }
-
-    friend Vector operator * (Vector vector, double l){
-        Vector A(vector.n);
-        for(int i = 0; i < vector.n; i++){
-            A.v[i] = vector.v[i] * l; 
-        }      
-        return A;    
-   }
-
-};
 
 class Method{
 public:
@@ -73,19 +37,19 @@ public:
     Vector y_1;
     Vector y_2;
     std::ofstream out_file;  
-    double args[10];
-    double (*xn_f)(double, Vector, double*);
+    json conf;
+    double (*xn_f)(double, Vector, json);
 
     Vector f(double t, Vector y){
         Vector y_d(n);
         for(int i = 0; i < n-1; i++){
             y_d.v[i] = y.v[i+1];
         }
-        y_d.v[n-1] = xn_f(t, y, args); 
+        y_d.v[n-1] = xn_f(t, y, conf); 
         return y_d;
     }
     
-    void solve(json conf){
+    void solve(){
         if(conf["type"].get<std::string>() == "rungecat"){
             solve_rungecut();
         } else if(conf["type"].get<std::string>()== "heun"){
@@ -132,33 +96,16 @@ public:
         }
     }
 
-    Method(double (*func)(double, Vector, double*), json conf, Vector initial_conditions){
+    Method(double (*func)(double, Vector, json), json config, Vector initial_conditions){
+        conf = config;
         xn_f = func;
         n = conf["order"].get<int>();
         y = initial_conditions;
         dt = conf["dt"].get<double>();
         N = conf["N"].get<int>();
         out_file.open(conf["output_file"].get<std::string>(), std::ios::out | std::ios_base::trunc);
-        args[0] = conf["w"].get<double>();
     }  
     
-
 };
 
-double func(double t, Vector y, double* args){
-
-        return -args[0] * args[0] * y.v[0];
-}
-
-
-int main(){
-    std::ifstream f("config.json");
-    json conf = json::parse(f);
-    
-    
-    Vector y_0(conf["order"].get<int>());
-    y_0.v[0] = conf["x_0"].get<double>();
-    y_0.v[1] = conf["u_0"].get<double>();
-    Method rk45(func, conf, y_0);
-    rk45.solve(conf);
-}
+#endif
