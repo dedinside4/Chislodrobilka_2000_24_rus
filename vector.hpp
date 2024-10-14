@@ -6,10 +6,12 @@
 class Vector{
 public:
 
-    double v[40];     
-    int n;
-    Vector(int dimension){
-        n = dimension;
+    double v[3][3];     
+    int elements;
+    int dimension;
+    Vector(int dim, int n){
+        elements = n;
+        dimension = dim;
     }
     Vector(){
     }
@@ -17,30 +19,52 @@ public:
         //delete[] v;
     }
 
-
     Vector operator + (Vector ob){
-        Vector A(n);
-        for(int i = 0; i < n; i++){
-            A.v[i] = v[i] + ob.v[i]; 
+        Vector A(dimension, elements);
+        for(int i = 0; i < elements; i++){
+            for(int j = 0; j < dimension; j++){
+                A.v[i][j] = v[i][j] + ob.v[i][j]; 
+            }
         } 
+
+        
         return A;         
     }
 
+    Vector operator - (Vector ob){
+        Vector A(dimension, elements);
+        for(int i = 0; i < elements; i++){
+            for(int j = 0; j < dimension; j++){
+                A.v[i][j] = v[i][j] - ob.v[i][j]; 
+            }
+        } 
+
+        
+        return A;         
+    }
+
+
     friend Vector operator * (double l, Vector vector){
-        Vector A(vector.n);
-        for(int i = 0; i < vector.n; i++){
-            A.v[i] = vector.v[i] * l; 
+        Vector A(vector.dimension, vector.elements);
+        
+        for(int i = 0; i < vector.elements; i++){
+            for(int j = 0; j < vector.dimension; j++){
+                A.v[i][j] = vector.v[i][j] * l; 
+            }
         }      
         return A;    
     }
 
     friend Vector operator * (Vector vector, double l){
-        Vector A(vector.n);
-        for(int i = 0; i < vector.n; i++){
-            A.v[i] = vector.v[i] * l; 
+        Vector A(vector.dimension, vector.elements);
+        
+        for(int i = 0; i < vector.elements; i++){
+            for(int j = 0; j < vector.dimension; j++){
+                A.v[i][j] = vector.v[i][j] * l;  
+            }
         }      
         return A;    
-   }
+    }
 
 };
 
