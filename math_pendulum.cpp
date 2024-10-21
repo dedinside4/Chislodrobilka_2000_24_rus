@@ -6,19 +6,17 @@
 using json = nlohmann::json;
 
 
-template <typename acc_type> void equation(acc_type t, State<acc_type>* y, State<acc_type>* y_d, json* config){
+template <typename acc_type> void equation(acc_type t, const State<acc_type>& y, State<acc_type>& y_d, json& config){
 
-        acc_type l = (*config)["l"].get<acc_type>();
-        acc_type g = (*config)["g"].get<acc_type>();     
+        acc_type l = config["l"].get<acc_type>();
+        acc_type g = config["g"].get<acc_type>();     
 
-        acc_type x = (*y).v[0][0];
-        acc_type v = (*y).v[1][0];    
+        acc_type x = y.v[0][0];
+        acc_type v = y.v[1][0];    
 
 
-        (*y_d).v[1][0] = - g * std::sin(x / l);
+        y_d.v[1][0] = - g * std::sin(x / l);
 }
-
-
 
 int main(){
     std::ifstream f("config.json");

@@ -40,9 +40,9 @@ public:
     State<acc_type> y_2;
     std::ofstream out_file;  
     json conf;
-    void (*xn_f)(acc_type, State<acc_type>*, State<acc_type>*, json*);
+    void (*xn_f)(acc_type, const State<acc_type>&, State<acc_type>&, json&);
 
-    Method(void (*func)(acc_type, State<acc_type>*, State<acc_type>*, json*), json config, State<acc_type> initial_conditions){
+    Method(void (*func)(acc_type, const State<acc_type>&, State<acc_type>&, json&), json config, State<acc_type>& initial_conditions){
         conf = config;
         xn_f = func;
         n = conf["order"].get<int>();
@@ -53,15 +53,14 @@ public:
         out_file.open(conf["output_file"].get<std::string>(), std::ios::out | std::ios_base::trunc);
     }  
 
-    State<acc_type> f(acc_type t, State<acc_type> y){
-        State<acc_type> y_d(dim, n);
+    State<acc_type>& f(acc_type t, const State<acc_type>& y){
         for(int i = 0; i < n-1; i++){
             for(int j = 0; j < dim; j++){
-                y_d.v[i][j] = y.v[i+1][j];
+                buffer<acc_type>.state_array[buffer<acc_type>.next].v[i][j] = y.v[i+1][j];
             }
         }
-        xn_f(t, &y, &y_d, &conf); 
-        return y_d;
+        xn_f(t, y, buffer<acc_type>.state_array[buffer<acc_type>.next], conf); 
+        return buffer<acc_type>.get_state();
     }
     
     void solve(){
@@ -137,15 +136,18 @@ public:
     }
     
     void solve_euler(){
+        //std::cout<<"first"<<' '<<y.v[0][0]<<std::endl; 
         for(int i = 1; i < N; i++){
             y_1 = y + dt * f(t, y);
             y = y_1;
             t += dt;
             for(int j = 0; j < dim; j++){
-                out_file<<y.v[0][j]<<' ';                  
+                out_file<<y.v[0][j]<<' ';
+                //std::cout<<y.v[0][0]<<' '<<(dt * f(t, y)).v[0][0]<<std::endl;                
             }
             out_file<<std::endl;
         }
+        out_file<<std::endl;
     }
     
 };

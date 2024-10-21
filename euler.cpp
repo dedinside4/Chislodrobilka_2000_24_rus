@@ -12,6 +12,8 @@ int main(){
         double u_1 = u - dt * w * w * x;
         x = x_1;
         u = u_1;
+        //std::cout<<x;
     }
-    std::cout<<u<<std::endl;
+    std::cout<<x;
+    return 0;
 }
