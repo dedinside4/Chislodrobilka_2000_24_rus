@@ -5,56 +5,56 @@
 #include <fstream>
 #include "json.hpp"
 #include <string>
-#include "vector.hpp"
+#include "state.hpp"
 #include <chrono>
 
 using json = nlohmann::json;
 
-class Method{
+template <typename acc_type> class Method{
 public:
-    double c[6] = {0, (double)1/4, (double)3/8, (double)12/13, 1, (double)1/2};
-    double b1[6] = {(double)16/135, 0, (double)6656/12825, (double)28561/56430, (double)-9/50, (double)2/55};
-    double b2[6] = {(double)25/216, 0, (double)1408/2565, (double)2197/4104, (double)-1/5, 0};
-    double a[6][6] = {
+    acc_type c[6] = {0, (acc_type)1/4, (acc_type)3/8, (acc_type)12/13, 1, (acc_type)1/2};
+    acc_type b1[6] = {(acc_type)16/135, 0, (acc_type)6656/12825, (acc_type)28561/56430, (acc_type)-9/50, (acc_type)2/55};
+    acc_type b2[6] = {(acc_type)25/216, 0, (acc_type)1408/2565, (acc_type)2197/4104, (acc_type)-1/5, 0};
+    acc_type a[6][6] = {
                       {0, 0, 0, 0, 0, 0},
-                      {(double)1/4, 0, 0, 0, 0, 0},
-                      {(double)3/32, (double)9/32, 0, 0, 0, 0},
-                      {(double)1932/2197, (double)-7200/2197, (double)7296/2197, 0, 0, 0},
-                      {(double)439/216, (double)-8, (double)3680/513, (double)-845/4104, 0, 0},
-                      {(double)-8/27, (double)2, (double)-3544/2565, (double)1859/4104, (double)-11/40, 0}    
+                      {(acc_type)1/4, 0, 0, 0, 0, 0},
+                      {(acc_type)3/32, (acc_type)9/32, 0, 0, 0, 0},
+                      {(acc_type)1932/2197, (acc_type)-7200/2197, (acc_type)7296/2197, 0, 0, 0},
+                      {(acc_type)439/216, (acc_type)-8, (acc_type)3680/513, (acc_type)-845/4104, 0, 0},
+                      {(acc_type)-8/27, (acc_type)2, (acc_type)-3544/2565, (acc_type)1859/4104, (acc_type)-11/40, 0}    
                      };
     
     int n;
     int N;
     int dim;
-    double t = 0;
-    double dt;
-    Vector y;
-    Vector k1;
-    Vector k2;
-    Vector k3;
-    Vector k4;
-    Vector k5;
-    Vector k6;
-    Vector y_1;
-    Vector y_2;
+    acc_type t = 0;
+    acc_type dt;
+    State<acc_type> y;
+    State<acc_type> k1;
+    State<acc_type> k2;
+    State<acc_type> k3;
+    State<acc_type> k4;
+    State<acc_type> k5;
+    State<acc_type> k6;
+    State<acc_type> y_1;
+    State<acc_type> y_2;
     std::ofstream out_file;  
     json conf;
-    void (*xn_f)(double, Vector*, Vector*, json*);
+    void (*xn_f)(acc_type, State<acc_type>*, State<acc_type>*, json*);
 
-    Method(void (*func)(double, Vector*, Vector*, json*), json config, Vector initial_conditions){
+    Method(void (*func)(acc_type, State<acc_type>*, State<acc_type>*, json*), json config, State<acc_type> initial_conditions){
         conf = config;
         xn_f = func;
         n = conf["order"].get<int>();
         dim = conf["dimension"].get<int>();
         y = initial_conditions;
-        dt = conf["dt"].get<double>();
+        dt = conf["dt"].get<acc_type>();
         N = conf["N"].get<int>();
         out_file.open(conf["output_file"].get<std::string>(), std::ios::out | std::ios_base::trunc);
     }  
 
-    Vector f(double t, Vector y){
-        Vector y_d(dim, n);
+    State<acc_type> f(acc_type t, State<acc_type> y){
+        State<acc_type> y_d(dim, n);
         for(int i = 0; i < n-1; i++){
             for(int j = 0; j < dim; j++){
                 y_d.v[i][j] = y.v[i+1][j];
@@ -78,9 +78,9 @@ public:
 
     void solve_rungecut(){
         auto start = std::chrono::steady_clock::now();
-        Vector comp(dim, n);
-        Vector err(dim, n);
-        Vector tr(dim, n);
+        State<acc_type> comp(dim, n);
+        State<acc_type> err(dim, n);
+        State<acc_type> tr(dim, n);
         for(int i = 0; i < n; i++){
             for(int j = 0; j < dim; j++){
                 comp.v[i][j] = 0;
@@ -108,13 +108,13 @@ public:
         }
         auto end = std::chrono::steady_clock::now();
         auto diff = end - start;
-        out_file << std::chrono::duration<double>(diff).count();
+        out_file << std::chrono::duration<acc_type>(diff).count();
     }
     
     void solve_heun(){
-        Vector comp(dim, n);
-        Vector err(dim, n);
-        Vector tr(dim, n);
+        State<acc_type> comp(dim, n);
+        State<acc_type> err(dim, n);
+        State<acc_type> tr(dim, n);
         for(int i = 0; i < n; i++){
             for(int j = 0; j < dim; j++){
                 comp.v[i][j] = 0;
