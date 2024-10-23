@@ -7,6 +7,7 @@
 #include <string>
 #include "state.hpp"
 #include <chrono>
+#include <algorithm>
 
 using json = nlohmann::json;
 
@@ -136,18 +137,16 @@ public:
     }
     
     void solve_euler(){
-        //std::cout<<"first"<<' '<<y.v[0][0]<<std::endl; 
         for(int i = 1; i < N; i++){
             y_1 = y + dt * f(t, y);
             y = y_1;
             t += dt;
-            for(int j = 0; j < dim; j++){
-                out_file<<y.v[0][j]<<' ';
-                //std::cout<<y.v[0][0]<<' '<<(dt * f(t, y)).v[0][0]<<std::endl;                
-            }
-            out_file<<std::endl;
+            //for(int j = 0; j < dim; j++){
+            //    out_file<<y.v[0][j]<<' ';             
+            //}
+            //out_file<<std::endl;
         }
-        out_file<<std::endl;
+        std::cout<<y.v[0][0]<<y.v[1][0];
     }
     
 };

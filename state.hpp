@@ -8,23 +8,20 @@ template <typename acc_type> class State{
 public:
 
     acc_type v[3][3];     
-    int elements = 3;
-    int dimension = 3;
+    int elements = 2;
+    int dimension = 1;
     State(int dim, int n){
-        std::cout << "constructor1. address: " << this << '\n';
+        //std::cout << "constructor1. address: " << this << '\n';
         elements = n;
         dimension = dim;
     }
 
 
-    State() {std::cout << "constructor2. address: " << this << '\n'; }
-    State(State const&) { std::cout << "copy constructor\n"; }
+    State() { };// {std::cout << "constructor2. address: " << this << '\n'; }
+    //State(State const&) { std::cout << "copy constructor\n"; }
     //State(State&&) { std::cout << "move constructor\n"; }
-    ~State() { std::cout << "destructor. address: " << this << '\n';}
+    //~State() { std::cout << "destructor. address: " << this << '\n';}
 
-    //State<acc_type> operator = (State ob){
-        
-    //}
 
     State<acc_type>& operator = (const State<acc_type>&);
     State<acc_type>& operator + (const State<acc_type>&);
@@ -33,7 +30,7 @@ public:
 };
 
 template <typename acc_type> struct StateBuffer{
-    State<acc_type> state_array[10];
+    State<acc_type> state_array[40];
     unsigned int next = 0;
     void reset(){
         next = 0;
