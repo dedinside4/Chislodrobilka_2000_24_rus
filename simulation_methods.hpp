@@ -8,10 +8,11 @@
 #include "state.hpp"
 #include <chrono>
 #include <algorithm>
+#include <iostream>
 
 using json = nlohmann::json;
 
-template <typename acc_type> class Method{
+template <typename acc_type, int dim, int n> class Method{
 public:
     acc_type c[6] = {0, (acc_type)1/4, (acc_type)3/8, (acc_type)12/13, 1, (acc_type)1/2};
     acc_type b1[6] = {(acc_type)16/135, 0, (acc_type)6656/12825, (acc_type)28561/56430, (acc_type)-9/50, (acc_type)2/55};
@@ -25,43 +26,40 @@ public:
                       {(acc_type)-8/27, (acc_type)2, (acc_type)-3544/2565, (acc_type)1859/4104, (acc_type)-11/40, 0}    
                      };
     
-    int n;
     int N;
-    int dim;
     acc_type t = 0;
     acc_type dt;
-    State<acc_type> y;
-    State<acc_type> k1;
-    State<acc_type> k2;
-    State<acc_type> k3;
-    State<acc_type> k4;
-    State<acc_type> k5;
-    State<acc_type> k6;
-    State<acc_type> y_1;
-    State<acc_type> y_2;
+    State<acc_type, dim, n> y;
+    State<acc_type, dim, n> k1;
+    State<acc_type, dim, n> k2;
+    State<acc_type, dim, n> k3;
+    State<acc_type, dim, n> k4;
+    State<acc_type, dim, n> k5;
+    State<acc_type, dim, n> k6;
+    State<acc_type, dim, n> y_1;
+    State<acc_type, dim, n> y_2;
     std::ofstream out_file;  
     json conf;
-    void (*xn_f)(acc_type, const State<acc_type>&, State<acc_type>&, json&);
+    State<acc_type, dim, n> (*xn_f)(acc_type, const State<acc_type, dim, n>&, State<acc_type, dim, n>, json&);
 
-    Method(void (*func)(acc_type, const State<acc_type>&, State<acc_type>&, json&), json config, State<acc_type>& initial_conditions){
+    Method(State<acc_type, dim, n> (*func)(acc_type, const State<acc_type, dim, n>&, State<acc_type, dim, n>, json&), json config, State<acc_type, dim, n>& initial_conditions){
         conf = config;
         xn_f = func;
-        n = conf["order"].get<int>();
-        dim = conf["dimension"].get<int>();
         y = initial_conditions;
         dt = conf["dt"].get<acc_type>();
         N = conf["N"].get<int>();
         out_file.open(conf["output_file"].get<std::string>(), std::ios::out | std::ios_base::trunc);
     }  
 
-    State<acc_type>& f(acc_type t, const State<acc_type>& y){
-        for(int i = 0; i < n-1; i++){
+    State<acc_type, dim, n> f(const acc_type t, const State<acc_type, dim, n>& y){
+       State<acc_type, dim, n> y_d;
+       for(int i = 0; i < n-1; i++){
             for(int j = 0; j < dim; j++){
-                buffer<acc_type>.state_array[buffer<acc_type>.next].v[i][j] = y.v[i+1][j];
+                y_d.v[i][j] = y.v[i+1][j];
             }
         }
-        xn_f(t, y, buffer<acc_type>.state_array[buffer<acc_type>.next], conf); 
-        return buffer<acc_type>.get_state();
+        xn_f(t, y, y_d, conf); 
+        return y_d;
     }
     
     void solve(){
@@ -77,10 +75,9 @@ public:
     }
 
     void solve_rungecut(){
-        auto start = std::chrono::steady_clock::now();
-        State<acc_type> comp(dim, n);
-        State<acc_type> err(dim, n);
-        State<acc_type> tr(dim, n);
+        State<acc_type, dim, n> comp;
+        State<acc_type, dim, n> err;
+        State<acc_type, dim, n> tr;
         for(int i = 0; i < n; i++){
             for(int j = 0; j < dim; j++){
                 comp.v[i][j] = 0;
@@ -106,15 +103,12 @@ public:
             }
             out_file<<std::endl;
         }
-        auto end = std::chrono::steady_clock::now();
-        auto diff = end - start;
-        out_file << std::chrono::duration<acc_type>(diff).count();
     }
     
     void solve_heun(){
-        State<acc_type> comp(dim, n);
-        State<acc_type> err(dim, n);
-        State<acc_type> tr(dim, n);
+        State<acc_type, dim, n> comp;
+        State<acc_type, dim, n> err;
+        State<acc_type, dim, n> tr;
         for(int i = 0; i < n; i++){
             for(int j = 0; j < dim; j++){
                 comp.v[i][j] = 0;
@@ -139,7 +133,10 @@ public:
     void solve_euler(){
         for(int i = 1; i < N; i++){
             y_1 = y + dt * f(t, y);
+            
             y = y_1;
+            
+            
             t += dt;
             //for(int j = 0; j < dim; j++){
             //    out_file<<y.v[0][j]<<' ';             

@@ -6,7 +6,8 @@
 using json = nlohmann::json;
 
 
-template <typename acc_type> void equation(acc_type t, const State<acc_type>& y, State<acc_type>& y_d, json& config){
+template <typename acc_type, int dim, int n>
+State<acc_type, dim, n> equation(const acc_type t, const State<acc_type, dim, n>& y, State<acc_type, dim, n> y_d, json& config){
 
         //acc_type l = config["l"].get<acc_type>();
         //acc_type g = config["g"].get<acc_type>();     
@@ -16,6 +17,7 @@ template <typename acc_type> void equation(acc_type t, const State<acc_type>& y,
 
 
         y_d.v[1][0] = - y.v[0][0];
+        return y_d;
 }
 
 void naive(int gay, json conf){
@@ -37,10 +39,15 @@ void naive(int gay, json conf){
 }
 
 void generic(int N, json conf){
-    State<float> y_0(conf["dimension"].get<int>(), conf["order"].get<int>());
+    const int dim = 1;//conf["dimension"].get<int>();
+    const int n = 2;//conf["order"].get<int>();
+
+    State<float, dim, n> y_0;
+
     y_0.v[0][0] = conf["x_0"].get<float>();
     y_0.v[1][0] = conf["u_0"].get<float>(); 
-    Method<float> mp(equation<float>, conf, y_0);
+
+    Method<float, dim, n> mp(equation<float, dim, n>, conf, y_0);
     mp.solve();
 }
 

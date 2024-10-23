@@ -59,7 +59,7 @@ public:
 };
 
 void naive(int N){
-    float dt = 0.01f;
+    float dt = 0.0001f;
     std::array<float, 2> init{1.0f, 0.0f}, next;
     for (int i=0; i< N; i++){
         next = {init[0] + dt * init[1], init[1] - dt * init[0]};
@@ -79,7 +79,7 @@ void generic(int N){
     MyState<myfloat, 2> next;
 
     for (int i=0; i< N; i++){
-        next = Euler<MyEquation<MyState<myfloat, 2>, Config2d>>::make_step(init, 0.001);
+        next = Euler<MyEquation<MyState<myfloat, 2>, Config2d>>::make_step(init, 0.0001);
         std::swap(next, init);
     }   
     std::cout << next[0] << next[1] << std::endl;
@@ -90,7 +90,7 @@ int main()
 {
     using namespace std::chrono;
 
-    const int N = 1000000000; 
+    const int N = 2000000000; 
 
     auto start = high_resolution_clock::now();
     naive(N);
