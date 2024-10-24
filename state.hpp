@@ -7,7 +7,7 @@
 template <typename acc_type, int dimension, int elements> class State{
 public:
 
-    acc_type v[elements][dimension];
+    acc_type v[elements][dimension] = {0};
 
     State(){
         //std::cout << "constructor1. address: " << this << '\n';
@@ -18,9 +18,10 @@ public:
     //State(State&&) { std::cout << "move constructor\n"; }
     //~State() { std::cout << "destructor. address: " << this << '\n';}
     
-    //void operator = (State& ob){
-    //    std::swap(ob.v, v);
-    //}
+    State<acc_type, dimension, elements> operator = (State ob){
+        std::swap(ob.v, v);
+        return *this;
+    }
 
 };
 
