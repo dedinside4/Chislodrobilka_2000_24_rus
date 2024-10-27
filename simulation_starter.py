@@ -33,7 +33,7 @@ def get_results(config):
 
 os.system("g++ math_pendulum.cpp -O3")
 
-dt  = 0.0001
+dt  = 0.01
 time = 3000
 
 N = int(time // dt)
@@ -45,7 +45,7 @@ x_0 = 0.5
 l = 0.6
 g = 10
 
-method_type = "euler"
+method_type = "heun"
 out_file = "xu.txt"
 order = 2
 dimension = 1

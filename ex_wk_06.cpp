@@ -90,7 +90,7 @@ int main()
 {
     using namespace std::chrono;
 
-    const int N = 2000000000; 
+    const int N = 1000000000; 
 
     auto start = high_resolution_clock::now();
     naive(N);
