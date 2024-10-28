@@ -18,16 +18,19 @@ int main(){
         float dt = conf["dt"].get<float>();
         int N = conf["N"].get<int>();
 
+        float w = conf["w"].get<float>();
+        float gamma = conf["gamma"].get<float>();
+
         std::string out_file = conf["output_file"].get<std::string>();
 
         if(conf["type"].get<std::string>() == "rungecutta"){
-            Rungecutta<float, task_dimensions, equation_order> mp(y_0, dt, N, out_file); 
+            Rungecutta<float, task_dimensions, equation_order> mp(y_0, dt, N, out_file, w, gamma); 
             mp.solve();   
         } else if(conf["type"].get<std::string>()== "heun"){
-            Heun<float, task_dimensions, equation_order> mp(y_0, dt, N, out_file); 
+            Heun<float, task_dimensions, equation_order> mp(y_0, dt, N, out_file, w, gamma); 
             mp.solve();   
         } else if(conf["type"].get<std::string>() == "euler"){
-            Euler<float, task_dimensions, equation_order> mp(y_0, dt, N, out_file); 
+            Euler<float, task_dimensions, equation_order> mp(y_0, dt, N, out_file, w, gamma); 
             mp.solve();   
         }         
     } else if(conf["acc_type"].get<std::string>() == "double"){
@@ -39,16 +42,19 @@ int main(){
         double dt = conf["dt"].get<double>();
         int N = conf["N"].get<int>();
 
+        double w = conf["w"].get<double>();
+        double gamma = conf["gamma"].get<double>();
+
         std::string out_file = conf["output_file"].get<std::string>();
 
         if(conf["type"].get<std::string>() == "rungecutta"){
-            Rungecutta<double, task_dimensions, equation_order> mp(y_0, dt, N, out_file); 
+            Rungecutta<double, task_dimensions, equation_order> mp(y_0, dt, N, out_file, w, gamma); 
             mp.solve();   
         } else if(conf["type"].get<std::string>()== "heun"){
-            Heun<double, task_dimensions, equation_order> mp(y_0, dt, N, out_file); 
+            Heun<double, task_dimensions, equation_order> mp(y_0, dt, N, out_file, w, gamma); 
             mp.solve();   
         } else if(conf["type"].get<std::string>() == "euler"){
-            Euler<double, task_dimensions, equation_order> mp(y_0, dt, N, out_file); 
+            Euler<double, task_dimensions, equation_order> mp(y_0, dt, N, out_file, w, gamma); 
             mp.solve();   
         } 
     }

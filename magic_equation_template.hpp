@@ -1,6 +1,6 @@
 #ifndef task_dimensions
-//#define w 1
-//#define gamma 1
+//#define w W
+//#define gamma GAMMA
 #define task_dimensions 1
 #define equation_order 2
 #endif
