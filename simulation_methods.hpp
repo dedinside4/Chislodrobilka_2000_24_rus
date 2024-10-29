@@ -23,7 +23,7 @@ public:
     acc_type gamma;
     
     
-    ;  
+    std::ofstream out_file;  
 
     State<acc_type, dim, n> y;
 

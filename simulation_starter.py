@@ -81,7 +81,7 @@ x_2, t_2 = get_results(config)
 
 #x_3, t_3 = get_results(config)
 
-y = x_0 * np.exp(-gamma * t_1) * np.cos(np.sqrt(w**2 - gamma**2) * t_1)
+y = x_0 * np.exp(-gamma * t_1) * np.cos(np.sqrt(w**2 - gamma**2) * t_1) + x_0 * gamma / (np.sqrt(w**2 - gamma**2)) * np.exp(-gamma * t_1) * np.sin(np.sqrt(w**2 - gamma**2) * t_1)
 
 x_max = []
 gammas = np.linspace(0.255, 0.2555, 100)
