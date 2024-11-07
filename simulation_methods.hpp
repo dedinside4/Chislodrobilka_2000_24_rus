@@ -18,16 +18,13 @@ public:
     
     int N;
     acc_type t = 0;
-    acc_type dt;
-    acc_type w; 
-    acc_type gamma;
-    
+    acc_type dt;  
     
     std::ofstream out_file;  
 
     State<acc_type, dim, n> y;
 
-    Method(State<acc_type, dim, n>& initial_conditions, acc_type dt, int N, std::string output_file, acc_type w, acc_type gamma) : y(initial_conditions), dt(dt), N(N), w(w), gamma(gamma){
+    Method(State<acc_type, dim, n>& initial_conditions, acc_type dt, int N, std::string output_file) : y(initial_conditions), dt(dt), N(N){
         out_file.open(output_file, std::ios::out | std::ios_base::trunc);
     }  
     
@@ -62,7 +59,7 @@ public:
     using Method<acc_type, dim, n>::f; 
 
 
-    Euler(State<acc_type, dim, n>& y_0, acc_type dt, int N, std::string out_file, acc_type w, acc_type gamma) : Method<acc_type, dim, n>(y_0, dt, N, out_file, w, gamma){ }    
+    Euler(State<acc_type, dim, n>& y_0, acc_type dt, int N, std::string out_file) : Method<acc_type, dim, n>(y_0, dt, N, out_file){ }    
 
     //State<acc_type, dim, n> c;    
     
@@ -105,7 +102,7 @@ public:
 
     State<acc_type, dim, n> y_1;
 
-    Heun(State<acc_type, dim, n>& y_0, acc_type dt, int N, std::string out_file, acc_type w, acc_type gamma) : Method<acc_type, dim, n>(y_0, dt, N, out_file, w, gamma){ }    
+    Heun(State<acc_type, dim, n>& y_0, acc_type dt, int N, std::string out_file) : Method<acc_type, dim, n>(y_0, dt, N, out_file){ }    
 
     void solve(){
         for(int i = 1; i < N; i++){
@@ -155,7 +152,7 @@ public:
     State<acc_type, dim, n> k5;
     State<acc_type, dim, n> k6;
 
-    Rungecutta(State<acc_type, dim, n>& y_0, acc_type dt, int N, std::string out_file, acc_type w, acc_type gamma) : Method<acc_type, dim, n>(y_0, dt, N, out_file, w, gamma){ }    
+    Rungecutta(State<acc_type, dim, n>& y_0, acc_type dt, int N, std::string out_file) : Method<acc_type, dim, n>(y_0, dt, N, out_file){ }    
 
     void solve(){
         for(int i = 1; i < N; i++){
