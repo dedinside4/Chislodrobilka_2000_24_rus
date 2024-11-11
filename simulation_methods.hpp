@@ -10,6 +10,7 @@
 #include <algorithm>
 #include <iostream>
 #include <initializer_list>
+#include "arguements.hpp"
 
 using json = nlohmann::json;
 
@@ -19,13 +20,16 @@ public:
     int N;
     acc_type t = 0;
     acc_type dt;  
+    arg_data<acc_type> args;
     
     std::ofstream out_file;  
 
     State<acc_type, dim, n> y;
 
-    Method(State<acc_type, dim, n>& initial_conditions, acc_type dt, int N, std::string output_file) : y(initial_conditions), dt(dt), N(N){
+    Method(State<acc_type, dim, n>& initial_conditions, arg_data<acc_type> arguements, std::string output_file) : y(initial_conditions), args(arguements){
         out_file.open(output_file, std::ios::out | std::ios_base::trunc);
+        dt = arguements.dt;
+        N = arguements.N;
     }  
     
     ~Method(){
@@ -59,23 +63,15 @@ public:
     using Method<acc_type, dim, n>::f; 
 
 
-    Euler(State<acc_type, dim, n>& y_0, acc_type dt, int N, std::string out_file) : Method<acc_type, dim, n>(y_0, dt, N, out_file){ }    
+    Euler(State<acc_type, dim, n>& y_0, arg_data<acc_type> arguements, std::string out_file) : Method<acc_type, dim, n>(y_0, arguements, out_file){ }    
 
-    //State<acc_type, dim, n> c;    
-    
-    //State<acc_type, dim, n> dy;
 
     State<acc_type, dim, n> y_t;
     
     void solve(){
         for(int i = 1; i < N; i++){
 
-            y_t = y + dt * f(t, y);
-            y = y_t;
-            //dy = dt * f(t, y);
-            //y_t = y + dy;
-            //c = (y_t - y) - dy;  
-            //y = y_t;        
+            y = y + dt * f(t, y); 
 
             t += dt;
             for(int j = 0; j < dim; j++){
@@ -102,7 +98,7 @@ public:
 
     State<acc_type, dim, n> y_1;
 
-    Heun(State<acc_type, dim, n>& y_0, acc_type dt, int N, std::string out_file) : Method<acc_type, dim, n>(y_0, dt, N, out_file){ }    
+    Heun(State<acc_type, dim, n>& y_0, arg_data<acc_type> arguements, std::string out_file) : Method<acc_type, dim, n>(y_0, arguements, out_file){ }    
 
     void solve(){
         for(int i = 1; i < N; i++){
@@ -152,7 +148,7 @@ public:
     State<acc_type, dim, n> k5;
     State<acc_type, dim, n> k6;
 
-    Rungecutta(State<acc_type, dim, n>& y_0, acc_type dt, int N, std::string out_file) : Method<acc_type, dim, n>(y_0, dt, N, out_file){ }    
+    Rungecutta(State<acc_type, dim, n>& y_0, arg_data<acc_type> arguements, std::string out_file) : Method<acc_type, dim, n>(y_0, arguements, out_file){ }    
 
     void solve(){
         for(int i = 1; i < N; i++){
