@@ -35,7 +35,7 @@ def afc():
 
     w0 = config["w0"]
     
-    freqs = np.linspace(0.1 * w0, 2 * w0, 300)    
+    freqs = np.linspace(0 * w0, 2 * w0, 500)    
     
     ampls = []
 
@@ -54,9 +54,11 @@ def afc():
 
         a = t.split()
 
-        x_max = max([float(a[i]) for i in range(N, config["N"] - 100)])
+        xs = [float(a[i]) for i in range(N, config["N"] - 1)]
+
+        x_max = max(xs)
         ampls.append(x_max)
-        
+     
     
     ax.plot(freqs, ampls, color = next(colours), label=f'{config["method_type"]}, dt = {config["dt"]}')
     
@@ -87,10 +89,20 @@ def activate():
         t.append(t[i] + config["dt"])
     x = np.array(x) 
     t = np.array(t)
-    ax.plot(t, x, color = next(colours), label=f'{config["method_type"]}, dt = {config["dt"]}')
-    
-    
+    ax.plot(t, x, color = next(colours), label=f'{config["method_type"]}, dt = {config["dt"]}, w = {config["w"]}')
 
+def update(frame):
+    # for each frame, update the data stored on each artist.
+
+    #frame = int(iteration * delay / dt / 1000)
+
+    # update the line plot:
+    pen_1.set_offsets([x_1[frame],y_1[frame]])
+    pen_2.set_offsets([x_2[frame],y_2[frame]])
+    #pen2.set_offsets([x_2[frame],y_2[frame]])
+    #pen3.set_offsets([x_3[frame],y_3[frame]])
+
+    return 
     
 def graph_colours():
     colors = ["red", "blue", "green", "yellow"]
@@ -137,6 +149,7 @@ def configure_all():
  
 def show():
     global ax
+    global fig
     ax.legend()
     plt.show()
     fig, ax = plt.subplots()

@@ -40,7 +40,7 @@ public:
        State<acc_type, dim, n> y_d;
        for(int i = 0; i < n-1; i++){
             for(int j = 0; j < dim; j++){
-                y_d.v[i][j] = y.v[i+1][j];
+                y_d[i][j] = y[i+1][j];
             }
         }
         #include "magic_equation.hpp"
@@ -75,7 +75,7 @@ public:
 
             t += dt;
             for(int j = 0; j < dim; j++){
-                out_file<<y.v[0][j]<<' ';             
+                out_file<<y[0][j]<<' ';             
             }
             out_file<<std::endl;
         }
@@ -101,17 +101,19 @@ public:
     Heun(State<acc_type, dim, n>& y_0, arg_data<acc_type> arguements, std::string out_file) : Method<acc_type, dim, n>(y_0, arguements, out_file){ }    
 
     void solve(){
-        for(int i = 1; i < N; i++){
-            y_1 = y + dt * f(t, y);
+        for(int q = 1; q < N / 100; q++){
+            for(int i = 0; i < 100; i++){
+                y_1 = y + dt * f(t, y);
     
-            y = y + (dt / 2) * (f(t, y) + f(t + dt, y_1));
+                y = y + (dt / 2) * (f(t, y) + f(t + dt, y_1));
 
-            t += dt;
+                t += dt;
+            }
             for(int j = 0; j < dim; j++){
-                out_file<<y.v[0][j]<<' ';                  
+                out_file<<y[0][j]<<' ';                  
             }
             out_file<<std::endl;
-        } 
+        }
     }
 
 };
@@ -151,19 +153,21 @@ public:
     Rungecutta(State<acc_type, dim, n>& y_0, arg_data<acc_type> arguements, std::string out_file) : Method<acc_type, dim, n>(y_0, arguements, out_file){ }    
 
     void solve(){
-        for(int i = 1; i < N; i++){
-            k1 = f(t, y);
-            k2 = f(t + c[1] * dt, y + (dt * (a[1][0] * k1)));
-            k3 = f(t + c[2] * dt, y + dt * (a[2][0] * k1 + a[2][1] * k2));
-            k4 = f(t + c[3] * dt, y + dt * (a[3][0] * k1 + a[3][1] * k2 + a[3][2] * k3));
-            k5 = f(t + c[4] * dt, y + dt * (a[4][0] * k1 + a[4][1] * k2 + a[4][2] * k3 + a[4][3] * k4));
-            k6 = f(t + c[5] * dt, y + dt * (a[5][0] * k1 + a[5][1] * k2 + a[5][2] * k3 + a[5][3] * k4 + a[5][4] * k5));
+        for(int q = 1; q < N / 100; q++){
+            for(int i = 0; i < 100; i++){
+                k1 = f(t, y);
+                k2 = f(t + c[1] * dt, y + (dt * (a[1][0] * k1)));
+                k3 = f(t + c[2] * dt, y + dt * (a[2][0] * k1 + a[2][1] * k2));
+                k4 = f(t + c[3] * dt, y + dt * (a[3][0] * k1 + a[3][1] * k2 + a[3][2] * k3));
+                k5 = f(t + c[4] * dt, y + dt * (a[4][0] * k1 + a[4][1] * k2 + a[4][2] * k3 + a[4][3] * k4));
+                k6 = f(t + c[5] * dt, y + dt * (a[5][0] * k1 + a[5][1] * k2 + a[5][2] * k3 + a[5][3] * k4 + a[5][4] * k5));
 
-            y = y + dt * (b2[0] * k1 + b2[1] * k2 + b2[2] * k3 + b2[3] * k4 + b2[4] * k5 + b2[5] * k6);
+                y = y + dt * (b2[0] * k1 + b2[1] * k2 + b2[2] * k3 + b2[3] * k4 + b2[4] * k5 + b2[5] * k6);
 
-            t += dt;
-             for(int j = 0; j < dim; j++){
-                out_file<<y.v[0][j]<<' ';                  
+                t += dt;
+            }
+            for(int j = 0; j < dim; j++){
+                out_file<<y[0][j]<<' ';                  
             }
             out_file<<std::endl;
         }

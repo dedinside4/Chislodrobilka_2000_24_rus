@@ -23,7 +23,24 @@ public:
         return *this;
     }
 
+    const acc_type* operator[] (int i) const {
+    
+       return v[i];         
+    }
+        
+    acc_type* operator[] (int i){
+    
+       return v[i];         
+    }
+
 };
+
+//template <typename acc_type, int dimension, int elements>
+//acc_type* operator[] (const State<acc_type, dimension, elements>& ob, int i) {
+//    
+ //      return ob.v[i];         
+ //   }
+
 
 template <typename acc_type, int dimension, int elements>
 State<acc_type, dimension, elements> operator + (const State<acc_type, dimension, elements>&  a, const State<acc_type, dimension, elements>&  b){

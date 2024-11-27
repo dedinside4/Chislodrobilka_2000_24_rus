@@ -12,17 +12,17 @@ int main(){
     if(conf["acc_type"].get<std::string>() == "float"){
         State<float, task_dimensions, equation_order> y_0;
 
-        y_0.v[0][0] = conf["y_0_0"].get<float>();
-        y_0.v[1][0] = conf["y_1_0"].get<float>();  
+        y_0[0][0] = conf["q_0"].get<float>();
+        y_0[0][1] = conf["q_1"].get<float>(); 
+        y_0[1][0] = conf["qd_0"].get<float>();
+        y_0[1][1] = conf["qd_1"].get<float>();  
 
         arg_data<float> args;
 
         args.dt = conf["dt"].get<float>();
         args.N = conf["N"].get<int>();
-        args.w0 = conf["w0"].get<float>();
-        args.gamma = conf["gamma"].get<float>();
-        args.w = conf["w"].get<float>();
-        args.F = conf["F"].get<float>();
+        args.l = conf["l"].get<float>();
+        args.g = conf["g"].get<float>();
     
 
         std::string out_file = conf["output_file"].get<std::string>();
@@ -40,17 +40,17 @@ int main(){
     } else if(conf["acc_type"].get<std::string>() == "double"){
         State<double, task_dimensions, equation_order> y_0;
 
-        y_0.v[0][0] = conf["y_0_0"].get<double>();
-        y_0.v[1][0] = conf["y_1_0"].get<double>();
+        y_0[0][0] = conf["q_0"].get<float>();
+        y_0[0][1] = conf["q_1"].get<float>(); 
+        y_0[1][0] = conf["qd_0"].get<float>();
+        y_0[1][1] = conf["qd_1"].get<float>();  
 
         arg_data<double> args;
 
         args.dt = conf["dt"].get<double>();
         args.N = conf["N"].get<int>();
-        args.w0 = conf["w0"].get<double>();
-        args.gamma = conf["gamma"].get<double>();
-        args.w = conf["w"].get<double>();
-        args.F = conf["F"].get<double>();
+        args.l = conf["l"].get<double>();
+        args.g = conf["g"].get<double>();
 
         std::string out_file = conf["output_file"].get<std::string>();
 
