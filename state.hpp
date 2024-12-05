@@ -24,12 +24,10 @@ public:
     }
 
     const acc_type* operator[] (int i) const {
-    
        return v[i];         
     }
         
     acc_type* operator[] (int i){
-    
        return v[i];         
     }
 

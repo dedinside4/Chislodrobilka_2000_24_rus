@@ -21,7 +21,10 @@ int main(){
 
         args.dt = conf["dt"].get<float>();
         args.N = conf["N"].get<int>();
-        args.l = conf["l"].get<float>();
+        args.l1 = conf["l1"].get<float>();
+        args.l2 = conf["l2"].get<float>();
+        args.m1 = conf["m1"].get<float>();
+        args.m2 = conf["m2"].get<float>();
         args.g = conf["g"].get<float>();
     
 
@@ -49,7 +52,10 @@ int main(){
 
         args.dt = conf["dt"].get<double>();
         args.N = conf["N"].get<int>();
-        args.l = conf["l"].get<double>();
+        args.l1 = conf["l1"].get<double>();
+        args.l2 = conf["l2"].get<double>();
+        args.m1 = conf["m1"].get<double>();
+        args.m2 = conf["m2"].get<double>();
         args.g = conf["g"].get<double>();
 
         std::string out_file = conf["output_file"].get<std::string>();

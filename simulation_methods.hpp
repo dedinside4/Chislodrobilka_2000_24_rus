@@ -167,9 +167,9 @@ public:
                 t += dt;
             }
             for(int j = 0; j < dim; j++){
-                out_file<<y[0][j]<<' ';                  
+                out_file<<y[0][j]<<' '<<y[1][j]<<' '<<std::endl;             
             }
-            out_file<<std::endl;
+        //    out_file<<std::endl;
         }
     }
 

@@ -17,7 +17,7 @@ def eul(n):
     dt = 0.00005;
     w = 1;
 
-    for i in range(0,n):
+    while True:
         x, u = iteration(x, u, dt, w)
     return u
 
