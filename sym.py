@@ -1,5 +1,5 @@
 from sympy.printing import print_ccode
-from sympy import cos, atan, symbols, Matrix
+from sympy import sin, cos, atan, symbols, Matrix
 from sympy.physics.mechanics import (dynamicsymbols, ReferenceFrame,
                                      Particle, Point)
 import sympy.physics.mechanics.system as system
@@ -10,24 +10,24 @@ from sympy import solve
 import numpy as np
 
 
-f1, f2 = dynamicsymbols('f1 f2')
-f1d, f2d = dynamicsymbols('f1 f2', 1)
-f1d2, f2d2 = dynamicsymbols('f1 f2', 2)
+f, a = dynamicsymbols('f a')
+fd, ad = dynamicsymbols('f a', 1)
 
-m1, m2, l1, l2, g = symbols('m1 m2 l1 l2 g')
 
-T = (f1d**2 * l1**2 + f2d**2 * l2**2 + 2 * l1 * l2 * f1d * f2d * cos(f1 - f2)) * m2 / 2 + f1d**2 * l1**2 * m1 / 2
+m, l, g, n = symbols('m l g n')
 
-P = - m1 * g * l1 * cos(f1) - m2 * g * (cos(f1) * l1 + cos(f2) * l2)
+T = m * l**2 * fd**2 / 2 + m * l * ad * sin(f) * fd + m * ad**2 / 2
+
+P = - m * g * (l * cos(f) + a)
 
 L = T - P
 
-LM = LagrangesMethod(L, [f1, f2])
+LM = LagrangesMethod(L, [f, a])
 
-func1 = solve(LM.form_lagranges_equations(), [f1d2, f2d2])[f1d2]
+#func1 = solve(LM.form_lagranges_equations(), [f1d2, f2d2])[f1d2]
 
-func2 = solve(LM.form_lagranges_equations(), [f1d2, f2d2])[f2d2]
+#func2 = solve(LM.form_lagranges_equations(), [f1d2, f2d2])[f2d2]
 
-print(func2)
+print(LM.form_lagranges_equations()[1])
 
 #print(solve(LM.form_lagranges_equations(), [f1d2, f2d2], dict=False))

@@ -1,9 +1,8 @@
-#define task_dimensions 2
+#define task_dimensions 1
 #define equation_order 2
     using  namespace std;
-	//y_d[1][0] = - ararargs.gs.args.g s.w0 * ararargs.gs.args.g s.w0 * y[0][0] - 2 * ararargs.gs.args.g s.arargs.gs.args.g amma * y[1][0] + (std::cos(ararargs.gs.args.g s.w * t) / std::abs(std::cos(ararargs.gs.args.g s.w * t))) * ararargs.gs.args.g s.F;
-    y_d[1][1] = args.g*args.m1  *sin(y[0][0] )*cos(y[0][0]  - y[0][1] )/(args.l2 *args.m1   - args.l2 *args.m2 * cos(y[0][0]  - y[0][1] ) * cos(y[0][0]  - y[0][1] ) + args.l2 *args.m2 ) - args.g*args.m1  *sin(y[0][1] )/(args.l2 *args.m1   - args.l2 *args.m2 * cos(y[0][0]  - y[0][1] ) * cos(y[0][0]  - y[0][1] ) + args.l2 *args.m2 ) + args.g*args.m2 *sin(y[0][0] )*cos(y[0][0]  - y[0][1] )/(args.l2 *args.m1   - args.l2 *args.m2 * cos(y[0][0]  - y[0][1] ) * cos(y[0][0]  - y[0][1] ) + args.l2 *args.m2 ) - args.g*args.m2 *sin(y[0][1] )/(args.l2 *args.m1   - args.l2 *args.m2 *cos(y[0][0]  - y[0][1] ) *cos(y[0][0]  - y[0][1] ) + args.l2 *args.m2 ) + args.l1 *args.m1  *sin(y[0][0]  - y[0][1] ) * y[1][0] * y[1][0] /(args.l2 *args.m1   - args.l2 *args.m2 * cos(y[0][0]  - y[0][1] ) * cos(y[0][0]  - y[0][1] ) + args.l2 *args.m2 ) + args.l1 *args.m2 *sin(y[0][0]  - y[0][1] ) * y[1][0] * y[1][0] /(args.l2 *args.m1   - args.l2 *args.m2 *cos(y[0][0]  - y[0][1] )*cos(y[0][0]  - y[0][1] ) + args.l2 *args.m2 ) + args.l2 *args.m2 *sin(y[0][0]  - y[0][1] )*cos(y[0][0]  - y[0][1] ) * y[1][1] * y[1][1] /(args.l2 *args.m1   - args.l2 *args.m2 * cos(y[0][0]  - y[0][1] ) * cos(y[0][0]  - y[0][1] ) + args.l2 *args.m2 );
-    y_d[1][0] = -args.g *args.m1  *sin(y[0][0] )/(args.l1 *args.m1   - args.l1 *args.m2   * cos(y[0][0]  - y[0][1] ) * cos(y[0][0]  - y[0][1] ) + args.l1 *args.m2   ) - args.g *args.m2   *sin(y[0][0] )/(args.l1 *args.m1   - args.l1 *args.m2   *cos(y[0][0]  - y[0][1] ) * cos(y[0][0]  - y[0][1] ) + args.l1 *args.m2   ) + args.g *args.m2   *sin(y[0][1] )*cos(y[0][0]  - y[0][1] )/(args.l1 *args.m1   - args.l1 *args.m2   * cos(y[0][0]  - y[0][1] ) * cos(y[0][0]  - y[0][1] ) + args.l1 *args.m2   ) - args.l1 *args.m2   *sin(y[0][0]  - y[0][1] )*cos(y[0][0]  - y[0][1] ) * y[1][0] * y[1][0] /(args.l1 *args.m1   - args.l1 *args.m2   * cos(y[0][0]  - y[0][1] ) * cos(y[0][0]  - y[0][1] ) + args.l1 *args.m2   ) - args.l2 *args.m2   *sin(y[0][0]  - y[0][1] ) * y[1][1] * y[1][1] /(args.l1 *args.m1   - args.l1 *args.m2   * cos(y[0][0]  - y[0][1] ) * cos(y[0][0]  - y[0][1] ) + args.l1 *args.m2 );
+	y_d[1][0] = (-args.a * args.nu * args.nu * cos(args.nu * t) - args.g) * sin(y[0][0]) / args.l;
+    
     
 
 

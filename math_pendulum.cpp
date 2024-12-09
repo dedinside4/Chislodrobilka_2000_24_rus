@@ -13,18 +13,17 @@ int main(){
         State<float, task_dimensions, equation_order> y_0;
 
         y_0[0][0] = conf["q_0"].get<float>();
-        y_0[0][1] = conf["q_1"].get<float>(); 
+        //y_0[0][1] = conf["q_1"].get<float>(); 
         y_0[1][0] = conf["qd_0"].get<float>();
-        y_0[1][1] = conf["qd_1"].get<float>();  
+        //y_0[1][1] = conf["qd_1"].get<float>();  
 
         arg_data<float> args;
 
         args.dt = conf["dt"].get<float>();
         args.N = conf["N"].get<int>();
-        args.l1 = conf["l1"].get<float>();
-        args.l2 = conf["l2"].get<float>();
-        args.m1 = conf["m1"].get<float>();
-        args.m2 = conf["m2"].get<float>();
+        args.l = conf["l"].get<float>();
+        args.nu = conf["nu"].get<float>();
+        args.a = conf["a"].get<float>();
         args.g = conf["g"].get<float>();
     
 
@@ -44,18 +43,17 @@ int main(){
         State<double, task_dimensions, equation_order> y_0;
 
         y_0[0][0] = conf["q_0"].get<float>();
-        y_0[0][1] = conf["q_1"].get<float>(); 
+        //y_0[0][1] = conf["q_1"].get<float>(); 
         y_0[1][0] = conf["qd_0"].get<float>();
-        y_0[1][1] = conf["qd_1"].get<float>();  
+        //y_0[1][1] = conf["qd_1"].get<float>();  
 
         arg_data<double> args;
 
         args.dt = conf["dt"].get<double>();
         args.N = conf["N"].get<int>();
-        args.l1 = conf["l1"].get<double>();
-        args.l2 = conf["l2"].get<double>();
-        args.m1 = conf["m1"].get<double>();
-        args.m2 = conf["m2"].get<double>();
+        args.l = conf["l"].get<double>();
+        args.nu = conf["nu"].get<double>();
+        args.a = conf["a"].get<double>();
         args.g = conf["g"].get<double>();
 
         std::string out_file = conf["output_file"].get<std::string>();
