@@ -5,22 +5,46 @@ import os
 
 colors_list = ["red", "blue", "green", "yellow", "purple", "black"]
 
-N = 70
+N = 1000
 
 #r_sample = [0.5]
 
-r = -1.0001
+r_sample = np.linspace(3, 4, 10000)
 
-print(r)#_sample)
+print(r_sample)
 
-y0_sample = np.linspace(0, -r, 20)
+y0 = 0.25 * max(r_sample)#np.linspace(0, 0.5, 10)
 
-print(y0_sample)
+x0_sample = [0.5]
 
 index = 0
 
-for y0 in y0_sample:
- #   for r in r_sample:   
+
+for x0 in x0_sample:
+    xn = []
+    rs = []
+    for r in r_sample: 
+        x = x0  
+        for i in range(1, 9 * N // 10):
+            x = r * x * (1 - x)
+        for i in range(9 * N // 10 , N):
+            x = r * x * (1 - x)
+            xn.append(x)  
+            rs.append(r) 
+        #n = np.array([i for i in range(1, N)])
+
+        #x = []
+
+        #x = np.array(x)
+plt.scatter(rs, xn, color = colors_list[index])
+plt.show()
+
+
+
+
+'''
+#for y0 in y0_sample:
+for r in r_sample:   
     with open("input.txt", 'w') as file:
         file.write(str(r) + ' ' + str(y0) + ' ' + str(N))
 
@@ -40,10 +64,11 @@ for y0 in y0_sample:
 
     y = np.array(y)
 
-    plt.scatter(n, y)#, color = colors_list[index])
+    plt.scatter(n, y, color = colors_list[index])
     index += 1    
+
     
-plt.show()
+    plt.show()
 
-
+'''
 
