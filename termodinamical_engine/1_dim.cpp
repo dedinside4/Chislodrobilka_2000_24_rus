@@ -65,10 +65,11 @@ double time_processing(Particle* particles, int N, double L){ //TODO improve neg
    return min_t;   
 }
 
-void COLLIDE(Particle* particles, int N, double L){
+void COLLIDE(Particle* particles, int N, double L, int& collisions){
     double l = particles[0].x - particles[0].r;
     if (l <= 0 and particles[0].v < 0){
         particles[0].v *= -1;       
+        collisions += 1;
     }   
     
     for(int i = 0; i < N - 1; i++){
@@ -78,12 +79,14 @@ void COLLIDE(Particle* particles, int N, double L){
             double v1 = v2 + particles[i + 1].v - particles[i].v;
             particles[i].v = v1;
             particles[i + 1].v = v2;
+            collisions += 1;
         }
     }
     
     l = L - (particles[N - 1].x + particles[N - 1].r);
     if (l <= 0 and particles[N - 1].v > 0){
         particles[N - 1].v *= -1;
+        collisions += 1;
     }
 
 }
@@ -92,8 +95,13 @@ void COLLIDE(Particle* particles, int N, double L){
 
 int main(){
 
-    std::ofstream out_file;
-    out_file.open("path.txt", std::ios::out | std::ios_base::trunc);
+    std::ofstream path_file;
+    std::ofstream data_file;
+    path_file.open("path.txt", std::ios::out | std::ios_base::trunc);
+    data_file.open("data.txt", std::ios::out | std::ios_base::trunc);
+
+    path_file.precision(16);
+    data_file.precision(16);
 
     std::ifstream base("base.txt");
     std::ifstream cond("start.txt");
@@ -123,6 +131,8 @@ int main(){
     double total_time = 0;
     
     double dt = 10;
+
+    int collisions = 0;
     
     while(total_time < time_limit){
 
@@ -134,21 +144,32 @@ int main(){
 
         while (time > dt){
             for(int i = 0; i < N; i++){
-                out_file<<particles[i].x<<' ';
+                path_file<<particles[i].x<<' ';
                 particles[i].x += particles[i].v * dt;
             }
-            out_file<<total_time<<' ';
+            path_file<<total_time<<std::endl;
             total_time += dt;
             time -= dt;
         }
-
+    
+        double kinetic1 = 0;
+        double kinetic2 = 0;
+        
         for(int i = 0; i < N; i++){
-            out_file<<particles[i].x<<' ';
+            //path_file<<particles[i].x<<' ';
             particles[i].x += particles[i].v * time;
-        }
-        out_file<<total_time<<' ';
 
-        COLLIDE(particles, N, L);
+            if(particles[i].m == m[0]){
+                kinetic1 += m[0] * particles[i].v * particles[i].v / 2;
+            } else{
+                kinetic2 += m[1] * particles[i].v * particles[i].v / 2;
+            }
+        }
+
+        //path_file<<total_time<<std::endl;
+        data_file<<total_time<<' '<<collisions<<' '<<kinetic1<<' '<<kinetic2<<std::endl;
+
+        COLLIDE(particles, N, L, collisions);
 
         total_time += time;
     }

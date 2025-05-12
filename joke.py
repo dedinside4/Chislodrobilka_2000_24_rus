@@ -9,7 +9,7 @@ N = 1000
 
 #r_sample = [0.5]
 
-r_sample = np.linspace(3, 4, 10000)
+r_sample = np.linspace(0, 4, 40000)
 
 print(r_sample)
 
